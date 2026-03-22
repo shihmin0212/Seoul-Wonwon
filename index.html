@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Seoul Wonwon 2026 - 首爾之旅</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="2026 首爾五天四夜旅遊行程大綱">
+    <link rel="icon" type="image/png" href="/hero.png" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Content will be rendered here by main.js -->
+      <header class="header">
+        <div class="header-content">
+          <div class="theme-toggle-container">
+            <button id="theme-btn" class="theme-btn" title="切換黑白等級">
+              <span class="vs">VS</span>
+            </button>
+          </div>
+          <h1 id="main-title">Seoul WONWON</h1>
+          <p>孫鍾元大師與首爾美食之旅</p>
+        </div>
+      </header>
+      
+      <main id="main-content">
+        <div class="loading">正在準備行程...</div>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-view="itinerary">行程</button>
+        <button class="nav-item" data-view="flights">航班</button>
+        <button class="nav-item" data-view="info">資訊</button>
+      </nav>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
