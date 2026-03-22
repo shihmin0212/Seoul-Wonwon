@@ -44,11 +44,11 @@ const itinerary = [
         type: 'arrival'
       },
       {
-        time: '20:00',
+        time: '19:30',
         title: '晚餐：傳統滋味（鰻魚）',
         location: '首爾精選鰻魚店',
         description: 'Day1 晚上 鰻魚 - 體驗如《黑白大廚》般的選材堅持。',
-        image: '/eel.png',
+        image: 'eel.png',
         type: 'food'
       }
     ]
@@ -105,7 +105,7 @@ const itinerary = [
         title: '聖水洞精緻冰淇淋',
         location: '聖水洞',
         description: '必吃的口感與美感對決。',
-        image: '/icecream.png',
+        image: 'icecream.png',
         type: 'food'
       },
       {
@@ -113,7 +113,7 @@ const itinerary = [
         title: '弘大終極烤肉對決',
         location: '弘大烤肉店',
         description: '挑選最符合您大廚味蕾的 BBQ。',
-        image: '/bbq.png',
+        image: 'bbq.png',
         type: 'food'
       }
     ]
@@ -185,7 +185,15 @@ function getNaverUrl(query) {
 }
 
 function renderItinerary() {
-  let html = `<div class="itinerary-container">`;
+  let html = `
+    <div class="hero-section">
+      <img src="hero.png" class="hero-image" alt="Seoul">
+      <div class="hero-overlay">
+        <h2>首爾之旅 2026</h2>
+      </div>
+    </div>
+    <div class="itinerary-container">
+  `;
 
   itinerary.forEach(day => {
     html += `
