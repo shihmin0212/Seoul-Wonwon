@@ -67,33 +67,34 @@ body {
   margin: 0 auto;
 }
 
-/* Theme Toggle Button like Showdown logo */
-.theme-toggle-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.75rem;
+/* Theme Toggle Fixed at Top Right */
+.theme-toggle-fixed {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.25rem;
+  z-index: 200;
 }
 
 .theme-btn {
   background: var(--text);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.5s ease, background 0.5s ease;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.theme-btn:active { transform: scale(0.9) rotate(180deg); }
+.theme-btn:active { transform: scale(0.9); }
 
 .vs {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--bg);
   letter-spacing: -1px;
 }
@@ -108,6 +109,7 @@ body {
   padding: 1.5rem 1rem;
   text-align: center;
   border-bottom: 1px solid var(--border);
+  position: relative;
 }
 
 .header h1 {
