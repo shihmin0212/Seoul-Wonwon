@@ -176,6 +176,24 @@
 
         <!-- Main Content -->
         <div class="p-4 flex-1 overflow-y-auto">
+
+            <!-- Hotel Status Card -->
+            <div class="mb-6 p-4 rounded-3xl border-2 flex items-center justify-between transition-colors duration-500 shadow-sm"
+                :class="[theme.lightBg, theme.borderColor]">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl">🏨</div>
+                    <div class="text-xs">
+                        <span class="font-black block mb-1" :class="theme.textColor">住宿地點：{{ getHotelName(activeDayIndex) }}</span>
+                        <div class="flex gap-2">
+                            <a :href="getNaverUrl(getHotelName(activeDayIndex))" target="_blank"
+                                class="text-indigo-500 font-bold underline decoration-2 underline-offset-4">NAVER 導航</a>
+                            <span class="text-gray-300">|</span>
+                            <a :href="getGoogleUrl(getHotelName(activeDayIndex))" target="_blank"
+                                class="text-gray-400 font-bold">Google</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Flight Status -->
             <div v-if="activeDayIndex === 0 || activeDayIndex === 4" class="card mb-6 p-5 border-l-[8px] bg-indigo-50 border-indigo-400">
@@ -445,7 +463,8 @@
 
                 const getNaverUrl = (q) => `https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(q)}`;
                 const getGoogleUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
-                const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬' }[t] || '📍');
+                const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬', cafe: '☕', transport: '🚌' }[t] || '📍');
+                const getHotelName = (idx) => "Lotte Hotel Seoul (明洞)";
 
                 onMounted(() => {
                     fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://tw.rter.info/capi.php'))
@@ -462,39 +481,45 @@
                     {
                         day: 1, date: '2026.04.30', title: '抵達首爾：大師序章',
                         events: [
-                            { time: '12:55', type: 'flight', title: 'TPE 桃園出發', location: '桃園國際機場', description: '啟程前往首爾，開啟美食巔峰對決。' },
-                            { time: '18:30', type: 'food', title: '廣藏市場 (光之對決)', location: '서울특별시 종로구 예지동 2-1', description: '廣藏市場 (광장시장) - 體驗最道地的市場小吃競爭。' },
-                            { time: '20:30', type: 'shop', title: '樂天超市 Zettaplex', location: '서울특별시 중구 봉래동2가 122-11', description: '樂天超市 Zettaplex 首爾站店 - 重裝掃貨首選。' }
+                            { time: '12:55', type: 'flight', title: 'TPE 桃園出發', location: '桃園國際機場', description: 'CI 162 啟程前往首爾，開啟美食巔峰對決。' },
+                            { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘機場快線 A\'REX 前往市區。' },
+                            { time: '18:30', type: 'food', title: '廣藏市場 (光之對決)', location: '서울특별시 종로구 예지동 2-1', description: '廣藏市場 (광장시장) - 體驗最道地的市場小吃競爭：生拌牛肉、綠豆煎餅。' },
+                            { time: '20:30', type: 'shop', title: '樂天超市 Zettaplex', location: '서울특별시 중구 봉래동2가 122-11', description: '樂天超市 Zettaplex 首爾站店 - 重裝掃貨首選，伴手禮一次補齊。' }
                         ]
                     },
                     {
                         day: 2, date: '2026.05.01', title: '潮流與料理的激戰',
                         events: [
-                            { time: '10:30', type: 'food', title: 'Rudebekia 早午餐', location: '서울특별시 종로구 세종로 100', description: '在光化門開啟優雅早晨。' },
-                            { time: '13:00', type: 'shop', title: '弘大潮流購物巡禮', location: '무신사 스탠다드 홍대점', description: 'Musinsa Standard 弘大店、AK PLAZA。' },
-                            { time: '16:00', type: 'food', title: 'Osteria Sam Kim', location: '서울특별시 마포구 合正洞 386-37', description: '《黑白大廚》白匙名廚 Sam Kim 的經典西餐。' }
+                            { time: '10:30', type: 'spot', title: '景福宮韓服體驗', location: '경복궁', description: '穿著韓服在古宮漫步，體驗朝鮮時代的氛圍。' },
+                            { time: '13:00', type: 'shop', title: '弘大潮流購物巡禮', location: '무신사 스탠다드 홍대점', description: 'Musinsa Standard 弘大店、AK PLAZA，探索 K-Fashion 前線。' },
+                            { time: '15:30', type: 'cafe', title: '延南洞咖啡街', location: '연남동 카페거리', description: '選一間特色咖啡廳度過悠閒午後，拍出網美照。' },
+                            { time: '18:30', type: 'food', title: 'Osteria Sam Kim', location: '서울특별시 마포구 합정동 386-37', description: '《黑白大廚》白匙名廚 Sam Kim 的經典義大利料理，預約必訪。' }
                         ]
                     },
                     {
                         day: 3, date: '2026.05.02', title: '聖水洞：設計感與溫度',
                         events: [
-                            { time: '11:00', type: 'food', title: '無垢屋 人蔘雞湯', location: '무구옥 성수점', description: '溫補雞肉料理，大廚推薦。' },
-                            { time: '13:30', type: 'shop', title: '聖水大林倉庫', location: '무신사 스토어 성수 大林倉庫', description: '聖水洞必訪時尚地標。' },
-                            { time: '18:30', type: 'food', title: '鮮彩 聖水', location: '선채 성수', description: '高質感的精緻韓食美學。' }
+                            { time: '11:00', type: 'food', title: '無垢屋 人蔘雞湯', location: '무구옥 성수점', description: '溫補雞肉料理，大廚推薦的純粹美味。' },
+                            { time: '13:30', type: 'shop', title: '聖水洞時尚探索', location: '무신사 스토어 성수 大林倉庫', description: '大林倉庫、Tamburins、Dior 聖水，感受首爾最紅的工業風創意區。' },
+                            { time: '16:00', type: 'cafe', title: 'ONION 聖水', location: '어니언 성수', description: '廢墟風咖啡廳鼻祖，品嚐招牌雪山麵包。' },
+                            { time: '18:30', type: 'food', title: '鮮彩 聖水', location: '선채 성수', description: '高質感的精緻韓食美學，視覺與味覺的雙重饗宴。' }
                         ]
                     },
                     {
                         day: 4, date: '2026.05.03', title: '延南/西橋：隱藏版巡禮',
                         events: [
-                            { time: '11:00', type: 'tour', title: 'Youssoful 香氛', location: '유쏘풀 연남점', description: '大受好評的 4min 香水體驗。' },
-                            { time: '14:00', type: 'shop', title: '文具與家飾質感行', location: '키트베러', description: 'Kit Better 旗艦店探索。' }
+                            { time: '11:00', type: 'tour', title: 'Youssoful 香氛', location: '유쏘풀 연남점', description: '大受好評的 4min 香水體驗，客製化個人香氛。' },
+                            { time: '13:00', type: 'food', title: '崔大叔烤肉', location: '최고집 홍대', description: '品嚐厚實多汁的韓式烤豬肉，搭配豐富小菜。' },
+                            { time: '15:00', type: 'shop', title: '文具與家飾質感行', location: '키트베러', description: 'Kit Better 旗艦店探索，尋找獨特的生活美學小物。' },
+                            { time: '18:30', type: 'food', title: 'BHC 炸雞 (明洞店)', location: 'BHC치킨 명동본점', description: '首爾之行必備：炸雞配啤酒 (Chimaek) 的完美句點。' }
                         ]
                     },
                     {
                         day: 5, date: '2026.05.04', title: '歸途：餘味無窮',
                         events: [
-                            { time: '10:00', type: 'shop', title: '最後採買', location: '首爾站', description: '補齊所有大廚等級的伴手禮。' },
-                            { time: '13:50', type: 'flight', title: 'ICN 機場出發', location: '仁川國際機場', description: '帶著滿滿的對決回憶返台。' }
+                            { time: '10:00', type: 'shop', title: '明洞最後巡禮', location: '명동', description: '補齊 Olive Young 缺漏商品，做最後的掃貨。' },
+                            { time: '12:00', type: 'transport', title: '前往仁川機場', location: '서울역', description: '搭乘 A\'REX 直達列車前往機場辦理退稅。' },
+                            { time: '15:30', type: 'flight', title: 'ICN 機場出發', location: '인천국제공항', description: 'CI 163 帶著滿滿的對決回憶返台。' }
                         ]
                     }
                 ]);
@@ -502,7 +527,7 @@
                 return {
                     itinerary, activeDayIndex, currentThemeKey, theme, setTheme,
                     krwAmount, twdAmount, currentRate, showTranslator, showShoppingList,
-                    currentCategory, currentPhrases, speakKorean, getNaverUrl, getGoogleUrl, getTypeIcon,
+                    currentCategory, currentPhrases, speakKorean, getNaverUrl, getGoogleUrl, getTypeIcon, getHotelName,
                     shoppingList, searchQuery, filterCategory, paginatedShoppingList,
                     newItemText, newItemCategory, storeCategories, addShoppingItem, deleteItem
                 };
