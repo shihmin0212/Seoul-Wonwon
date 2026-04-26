@@ -162,13 +162,15 @@
                                 </div>
                                 <div class="p-3 bg-gray-50 rounded-2xl relative group">
                                     <span class="text-[10px] font-bold text-gray-400 block mb-1">英文地址</span>
-                                    <p class="text-sm font-bold text-gray-800">Donggyo-ro 32-gil 16</p>
-                                    <button @click="copyText('Donggyo-ro 32-gil 16')" class="absolute right-3 top-3 text-xs bg-white px-2 py-1 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition">複製</button>
+                                    <p class="text-sm font-bold text-gray-800">16, Donggyo-ro 32-gil, Mapo-gu, Seoul</p>
+                                    <button @click="copyText('16, Donggyo-ro 32-gil, Mapo-gu, Seoul')" class="absolute right-3 top-3 text-xs bg-white px-2 py-1 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition">複製</button>
                                 </div>
+
                             </div>
                             <div class="mt-4 flex gap-2">
                                 <a :href="getNaverUrl('서울 마포구 연남동 381-21')" target="_blank" class="btn-naver flex-1 justify-center">NAVER 導航</a>
-                                <a :href="getGoogleUrl('Donggyo-ro 32-gil 16')" target="_blank" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-xs font-bold flex items-center flex-1 justify-center">Google Map</a>
+                                <a :href="getGoogleUrl('16, Donggyo-ro 32-gil, Mapo-gu, Seoul')" target="_blank" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-xs font-bold flex items-center flex-1 justify-center">Google Map</a>
+
                             </div>
                         </div>
 
@@ -374,6 +376,8 @@
                     <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl">🏠</div>
                     <div class="text-xs">
                         <span class="font-black block mb-1" :class="theme.textColor">住宿地點：{{ getHotelName(activeDayIndex) }}</span>
+                        <p class="text-[10px] text-gray-500 font-bold">서울 마포구 연남동 381-21</p>
+
                         <div class="flex gap-2">
                             <span class="text-indigo-500 font-bold underline decoration-2 underline-offset-4">查看詳細資訊 & 路線</span>
                         </div>
