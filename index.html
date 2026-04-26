@@ -320,9 +320,9 @@
         <div
             class="mx-4 mt-4 mb-2 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl" :class="theme.btnColor">₩ 匯率</span>
-                <span class="text-sm font-bold text-gray-600">{{ currentRate }}</span>
+                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl" :class="theme.btnColor">1 TWD ≈ {{ Math.floor(1 / currentRate) }} KRW</span>
             </div>
+
             <div class="flex items-center gap-2">
                 <input type="number" v-model="krwAmount" placeholder="KRW"
                     class="w-24 p-2 bg-gray-50 border-0 rounded-xl text-right text-sm font-bold focus:ring-2 focus:ring-blue-400 outline-none">
