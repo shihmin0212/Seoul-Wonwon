@@ -147,6 +147,103 @@
             </div>
         </header>
 
+        <!-- Accommodation Detail Modal (Triggered by Hotel Card) -->
+        <transition name="modal">
+            <div v-if="showHotelDetails"
+                class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 py-6"
+                style="background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);">
+                <div class="absolute inset-0" @click="showHotelDetails = false"></div>
+                <div class="modal-content w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl overflow-hidden relative border-4 flex flex-col max-h-[85vh]"
+                    :class="theme.borderColor">
+                    <div class="p-6 border-b flex justify-between items-center" :class="theme.lightBg">
+                        <h3 class="font-black text-xl flex items-center gap-2" :class="theme.textColor">🏠 住宿資訊</h3>
+                        <button @click="showHotelDetails = false" class="text-3xl font-black text-gray-300 hover:text-gray-500">×</button>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50/50">
+                        <!-- Hotel Name & Address -->
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                            <h4 class="font-black text-lg mb-2">유람하우스 EURAM HOUSE</h4>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-gray-50 rounded-2xl relative group">
+                                    <span class="text-[10px] font-bold text-gray-400 block mb-1">韓文地址</span>
+                                    <p class="text-sm font-bold text-gray-800">서울 마포구 연남동 381-21</p>
+                                    <button @click="copyText('서울 마포구 연남동 381-21')" class="absolute right-3 top-3 text-xs bg-white px-2 py-1 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition">複製</button>
+                                </div>
+                                <div class="p-3 bg-gray-50 rounded-2xl relative group">
+                                    <span class="text-[10px] font-bold text-gray-400 block mb-1">英文地址</span>
+                                    <p class="text-sm font-bold text-gray-800">Donggyo-ro 32-gil 16</p>
+                                    <button @click="copyText('Donggyo-ro 32-gil 16')" class="absolute right-3 top-3 text-xs bg-white px-2 py-1 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition">複製</button>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <a :href="getNaverUrl('서울 마포구 연남동 381-21')" target="_blank" class="btn-naver flex-1 justify-center">NAVER 導航</a>
+                                <a :href="getGoogleUrl('Donggyo-ro 32-gil 16')" target="_blank" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-xs font-bold flex items-center flex-1 justify-center">Google Map</a>
+                            </div>
+                        </div>
+
+                        <!-- Payment Info -->
+                        <div class="bg-indigo-50 p-5 rounded-3xl border-2 border-indigo-100">
+                            <h4 class="font-black text-indigo-900 mb-3 flex items-center gap-2">💰 費用明細</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-indigo-600 font-bold">總金額 (4人)</span>
+                                    <span class="font-black">₩ 1,260,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-green-600 font-bold">已付訂金</span>
+                                    <span class="font-black">₩ 200,000</span>
+                                </div>
+                                <div class="h-px bg-indigo-200 my-2"></div>
+                                <div class="flex justify-between text-lg">
+                                    <span class="text-indigo-900 font-black">剩餘尾款</span>
+                                    <span class="font-black text-red-500">₩ 1,060,000</span>
+                                </div>
+                                <p class="text-[10px] text-indigo-400 font-bold mt-2 text-center">※ 尾款請於入住當天/隔天以現金支付</p>
+                            </div>
+                        </div>
+
+                        <!-- Rules -->
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                            <h4 class="font-black text-gray-800 mb-3">📝 入住須知</h4>
+                            <ul class="text-xs space-y-2 text-gray-600 font-bold">
+                                <li class="flex gap-2"><span>🕒</span> Check-in: 15:00 / Out: 11:00</li>
+                                <li class="flex gap-2"><span>🚭</span> 全室禁菸 (違者罰款 ₩300,000)</li>
+                                <li class="flex gap-2"><span>🗑️</span> 垃圾需分類，放至 1F 門口指定處</li>
+                                <li class="flex gap-2"><span>🤫</span> 22:00 後請保持安靜，勿大聲喧嘩</li>
+                                <li class="flex gap-2"><span>👟</span> 室內請脫鞋，換穿室內拖</li>
+                                <li class="flex gap-2"><span>🔌</span> 外出請關閉冷氣及電燈</li>
+                            </ul>
+                        </div>
+
+                        <!-- Directions -->
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                            <h4 class="font-black text-gray-800 mb-3">📍 路線指南 (弘大站 3 號口)</h4>
+                            <div class="text-xs space-y-3 text-gray-600 font-bold">
+                                <div class="flex items-start gap-2">
+                                    <span class="w-5 h-5 bg-gray-100 rounded flex items-center justify-center flex-shrink-0 text-[10px]">1</span>
+                                    <p>弘大入口站 3 號出口出來，沿著京義線林道公園直走。</p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="w-5 h-5 bg-gray-100 rounded flex items-center justify-center flex-shrink-0 text-[10px]">2</span>
+                                    <p>經過第一個十字路口後繼續直行。</p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="w-5 h-5 bg-gray-100 rounded flex items-center justify-center flex-shrink-0 text-[10px]">3</span>
+                                    <p>在有「白種元咖啡 (PAIK'S COFFEE)」的巷子左轉進去。</p>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="w-5 h-5 bg-gray-100 rounded flex items-center justify-center flex-shrink-0 text-[10px]">4</span>
+                                    <p>直行約 2 分鐘即可看到右側的「EURAM HOUSE」灰色大樓。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+
         <!-- Currency Converter -->
         <div
             class="mx-4 mt-4 mb-2 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
@@ -178,22 +275,19 @@
         <div class="p-4 flex-1 overflow-y-auto">
 
             <!-- Hotel Status Card -->
-            <div class="mb-6 p-4 rounded-3xl border-2 flex items-center justify-between transition-colors duration-500 shadow-sm"
+            <div @click="showHotelDetails = true" class="mb-6 p-4 rounded-3xl border-2 flex items-center justify-between transition-colors duration-500 shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95"
                 :class="[theme.lightBg, theme.borderColor]">
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl">🏨</div>
+                    <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl">🏠</div>
                     <div class="text-xs">
                         <span class="font-black block mb-1" :class="theme.textColor">住宿地點：{{ getHotelName(activeDayIndex) }}</span>
                         <div class="flex gap-2">
-                            <a :href="getNaverUrl(getHotelName(activeDayIndex))" target="_blank"
-                                class="text-indigo-500 font-bold underline decoration-2 underline-offset-4">NAVER 導航</a>
-                            <span class="text-gray-300">|</span>
-                            <a :href="getGoogleUrl(getHotelName(activeDayIndex))" target="_blank"
-                                class="text-gray-400 font-bold">Google</a>
+                            <span class="text-indigo-500 font-bold underline decoration-2 underline-offset-4">查看詳細資訊 & 路線</span>
                         </div>
                     </div>
                 </div>
             </div>
+
             
             <!-- Flight Status -->
             <div v-if="activeDayIndex === 0 || activeDayIndex === 4" class="card mb-6 p-5 border-l-[8px] bg-indigo-50 border-indigo-400">
@@ -409,7 +503,9 @@
                 const currentRate = ref('0.0240');
                 const showTranslator = ref(false);
                 const showShoppingList = ref(false);
+                const showHotelDetails = ref(false);
                 const currentCategory = ref('用餐');
+
                 const searchQuery = ref('');
                 const filterCategory = ref('All');
                 const newItemText = ref('');
@@ -461,10 +557,18 @@
                     }
                 };
 
+                const copyText = (text) => {
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('已複製到剪貼簿！');
+                    });
+                };
+
+
                 const getNaverUrl = (q) => `https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(q)}`;
                 const getGoogleUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
                 const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬', cafe: '☕', transport: '🚌' }[t] || '📍');
-                const getHotelName = (idx) => "Lotte Hotel Seoul (明洞)";
+                const getHotelName = (idx) => "EURAM HOUSE (弘大/延南)";
+
 
                 onMounted(() => {
                     fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://tw.rter.info/capi.php'))
@@ -482,7 +586,7 @@
                         day: 1, date: '2026.04.30', title: '抵達首爾：大師序章',
                         events: [
                             { time: '12:55', type: 'flight', title: 'TPE 桃園出發', location: '桃園國際機場', description: 'CI 162 啟程前往首爾，開啟美食巔峰對決。' },
-                            { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘機場快線 A\'REX 前往市區。' },
+                            { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘 A\'REX 前往弘大入口站。抵達 EURAM HOUSE 後需支付尾款 ₩1,060,000 (可當天或隔天支付)。' },
                             { time: '18:30', type: 'food', title: '廣藏市場 (光之對決)', location: '서울특별시 종로구 예지동 2-1', description: '廣藏市場 (광장시장) - 體驗最道地的市場小吃競爭：生拌牛肉、綠豆煎餅。' },
                             { time: '20:30', type: 'shop', title: '樂天超市 Zettaplex', location: '서울특별시 중구 봉래동2가 122-11', description: '樂天超市 Zettaplex 首爾站店 - 重裝掃貨首選，伴手禮一次補齊。' }
                         ]
