@@ -319,9 +319,11 @@
         <!-- Currency Converter -->
         <div
             class="mx-4 mt-4 mb-2 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl" :class="theme.btnColor">1 TWD ≈ {{ Math.floor(1 / currentRate) }} KRW</span>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl whitespace-nowrap" :class="theme.btnColor">1 TWD ≈ {{ Math.floor(1 / currentRate) }} KRW</span>
+                <span class="text-[8px] text-gray-400 font-bold ml-1">實時來源：ExchangeRate-API</span>
             </div>
+
 
             <div class="flex items-center gap-2">
                 <input type="number" v-model="krwAmount" placeholder="KRW"
