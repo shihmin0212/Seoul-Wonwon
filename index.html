@@ -425,9 +425,10 @@
                                     <button v-if="item.transportUrl" @click="showTransportDetails = true" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black flex items-center gap-2 shadow-md">
                                         <span>🚆 交通攻略</span>
                                     </button>
-                                    <a :href="item.naverUrl || getNaverUrl(item.location || item.title)" target="_blank" class="btn-naver">
+                                    <a v-if="!item.noMap" :href="item.naverUrl || getNaverUrl(item.location || item.title)" target="_blank" class="btn-naver">
                                         <span>NAVER MAP</span>
                                     </a>
+
 
 
                                     <a v-if="item.transitUrl" :href="item.transitUrl" target="_blank" class="bg-indigo-100 text-indigo-600 px-3 py-2 rounded-xl text-[10px] font-bold flex items-center gap-1">
@@ -710,7 +711,8 @@
                             { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘 AREX「普通列車」前往弘大入口站 (3 號出口)。抵達 EURAM HOUSE 後需支付尾款 ₩1,060,000。', transportUrl: true },
                             { time: '17:30', type: 'tour', title: '換錢所 (Money Exchange)', location: '서울특별시 마포구 동교동', naverUrl: 'https://naver.me/5iTdRmbO', description: '抵達市區後優先換匯，準備接下來幾天的現金開銷。' },
                             { time: '18:30', type: 'food', title: '一心鰻魚 弘大本店 (Dinner)', location: '서울특별시 마포구 동교로 219', naverUrl: 'https://naver.me/Gxk1bzYY', description: '飯店附近的超人氣烤鰻魚！就在延南洞林道公園旁，可以先在公園散步「進去玩」一下，再出來享受大餐。' },
-                            { time: '20:30', type: 'shop', title: '弘大商圈散策', location: '서울특별시 마포구 홍대입구', description: '餐後在弘大商圈隨意走走，享受首爾夜晚的活力。' }
+                            { time: '20:30', type: 'shop', title: '弘大商圈散策', location: '서울특별시 마포구 홍대입구', description: '餐後在弘大商圈隨意走走，享受首爾夜晚的活力。', noMap: true }
+
                         ]
                     },
                     {
