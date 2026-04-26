@@ -320,9 +320,10 @@
         <div
             class="mx-4 mt-4 mb-2 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
             <div class="flex flex-col gap-1">
-                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl whitespace-nowrap" :class="theme.btnColor">1 TWD ≈ {{ Math.floor(1 / currentRate) }} KRW</span>
-                <span class="text-[8px] text-gray-400 font-bold ml-1">實時來源：ExchangeRate-API</span>
+                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl whitespace-nowrap" :class="theme.btnColor">1 TWD ≈ {{ (1 / currentRate).toFixed(2) }} KRW</span>
+                <a href="https://www.exchangerate-api.com/" target="_blank" class="text-[8px] text-gray-400 font-bold ml-1 hover:text-blue-500 underline decoration-dotted">實時來源：ExchangeRate-API</a>
             </div>
+
 
 
             <div class="flex items-center gap-2">
