@@ -233,6 +233,88 @@
             </div>
         </transition>
 
+        <!-- Transport Detail Modal -->
+        <transition name="modal">
+            <div v-if="showTransportDetails"
+                class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 py-6"
+                style="background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);">
+                <div class="absolute inset-0" @click="showTransportDetails = false"></div>
+                <div class="modal-content w-full max-max-sm bg-white rounded-[2.5rem] shadow-2xl overflow-hidden relative border-4 flex flex-col max-h-[85vh]"
+                    :class="theme.borderColor">
+                    <div class="p-6 border-b flex justify-between items-center" :class="theme.lightBg">
+                        <h3 class="font-black text-xl flex items-center gap-2" :class="theme.textColor">🚆 交通指南 (AREX)</h3>
+                        <button @click="showTransportDetails = false" class="text-3xl font-black text-gray-300 hover:text-gray-500">×</button>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50/50">
+                        <!-- AREX Train Types -->
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                            <h4 class="font-black text-lg mb-3 flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm">!</span>
+                                重要：請搭乘「普通列車」
+                            </h4>
+                            <div class="space-y-4">
+                                <div class="p-4 border-2 border-blue-400 rounded-2xl bg-blue-50">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-black text-blue-900">✅ 普通列車 (All-stop)</span>
+                                        <span class="text-[10px] bg-blue-400 text-white px-2 py-0.5 rounded-full font-bold">推薦</span>
+                                    </div>
+                                    <p class="text-xs text-blue-700 leading-relaxed">停靠：弘大入口站。從機場出發約 50-60 分鐘。班次密集，不需對號座。</p>
+                                </div>
+                                <div class="p-4 border border-gray-200 rounded-2xl bg-gray-50 opacity-60">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-black text-gray-400">❌ 直達列車 (Express)</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 leading-relaxed">注意：僅停靠首爾站，**不停靠弘大**。請勿搭乘此列車前往住宿地。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Arrival Info -->
+                        <div class="bg-indigo-50 p-5 rounded-3xl border-2 border-indigo-100">
+                            <h4 class="font-black text-indigo-900 mb-3 flex items-center gap-2">📍 抵達弘大入口站</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg">3️⃣</div>
+                                    <div>
+                                        <p class="text-sm font-black text-gray-800">請前往 3 號出口</p>
+                                        <p class="text-[10px] text-gray-400">這是離延南洞及 EURAM HOUSE 最近的出口。</p>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white/50 rounded-xl border border-indigo-100 text-[11px] text-indigo-800 leading-relaxed">
+                                    弘大入口站很大，AREX 月台位於地下深處，請依照指標往 2 號線/京義中央線方向移動，並尋找「3 號出口 (延南洞)」指標。
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Route Map Placeholder/Description -->
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                            <h4 class="font-black text-gray-800 mb-3">🗺️ AREX 路線概覽</h4>
+                            <div class="relative py-2 pl-4 border-l-4 border-blue-400 space-y-4">
+                                <div class="relative">
+                                    <span class="absolute -left-[22px] top-1 w-3 h-3 rounded-full bg-blue-400 ring-4 ring-white"></span>
+                                    <p class="text-xs font-black">仁川國際機場 (T1/T2)</p>
+                                </div>
+                                <div class="relative opacity-40">
+                                    <span class="absolute -left-[22px] top-1 w-3 h-3 rounded-full bg-blue-400 ring-4 ring-white"></span>
+                                    <p class="text-[10px]">中間各站 (雲西、桂陽、金浦機場...)</p>
+                                </div>
+                                <div class="relative">
+                                    <span class="absolute -left-[22px] top-1 w-3 h-3 rounded-full bg-blue-600 ring-4 ring-blue-100"></span>
+                                    <p class="text-xs font-black text-blue-600">弘大入口站 (抵達處)</p>
+                                </div>
+                                <div class="relative opacity-40">
+                                    <span class="absolute -left-[22px] top-1 w-3 h-3 rounded-full bg-blue-400 ring-4 ring-white"></span>
+                                    <p class="text-[10px]">首爾站</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+
 
         <!-- Currency Converter -->
         <div
@@ -335,9 +417,13 @@
                                 <p class="text-sm text-gray-500 mt-2 font-medium leading-relaxed">{{ item.description }}</p>
                                 
                                 <div class="mt-4 flex flex-wrap gap-2">
+                                    <button v-if="item.transportUrl" @click="showTransportDetails = true" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black flex items-center gap-2 shadow-md">
+                                        <span>🚆 交通攻略</span>
+                                    </button>
                                     <a :href="item.naverUrl || getNaverUrl(item.location || item.title)" target="_blank" class="btn-naver">
                                         <span>NAVER MAP</span>
                                     </a>
+
 
                                     <a v-if="item.location" :href="getGoogleUrl(item.location)" target="_blank" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-[10px] font-bold flex items-center">
                                         Google Map
@@ -511,7 +597,9 @@
                 const showTranslator = ref(false);
                 const showShoppingList = ref(false);
                 const showHotelDetails = ref(false);
+                const showTransportDetails = ref(false);
                 const currentCategory = ref('用餐');
+
 
                 const searchQuery = ref('');
                 const filterCategory = ref('All');
@@ -604,7 +692,8 @@
                             { time: '12:55', type: 'flight', title: 'TPE 桃園出發', location: '桃園國際機場', description: 'OZ 712 啟程前往首爾，開啟去首爾看元元之旅。' },
 
 
-                            { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘 A\'REX 前往弘大入口站。抵達 EURAM HOUSE 後需支付尾款 ₩1,060,000 (可當天或隔天支付)。' },
+                            { time: '16:30', type: 'arrival', title: 'ICN 仁川抵達', location: '인천국제공항', description: '辦理入境並搭乘 AREX「普通列車」前往弘大入口站 (3 號出口)。抵達 EURAM HOUSE 後需支付尾款 ₩1,060,000。', transportUrl: true },
+
                             { time: '17:30', type: 'tour', title: '換錢所 (Money Exchange)', location: '서울특별시 마포구 동교동', naverUrl: 'https://naver.me/5iTdRmbO', description: '抵達市區後優先換匯，準備接下來幾天的現金開銷。' },
                             { time: '18:30', type: 'food', title: '一心鰻魚 弘大本店 (Dinner)', location: '서울특별시 마포구 동교로 219', naverUrl: 'https://naver.me/Gxk1bzYY', description: '飯店附近的超人氣烤鰻魚！就在延南洞林道公園旁，可以先在公園散步「進去玩」一下，再出來享受大餐。' },
                             { time: '20:30', type: 'shop', title: '弘大商圈散策', location: '서울특별시 마포구 홍대입구', description: '餐後在弘大商圈隨意走走，享受首爾夜晚的活力。' }
@@ -655,11 +744,12 @@
 
                 return {
                     itinerary, activeDayIndex, currentThemeKey, theme, setTheme,
-                    krwAmount, twdAmount, currentRate, showTranslator, showShoppingList, showHotelDetails,
+                    krwAmount, twdAmount, currentRate, showTranslator, showShoppingList, showHotelDetails, showTransportDetails,
                     currentCategory, currentPhrases, speakKorean, copyText, getNaverUrl, getGoogleUrl, getTypeIcon, getHotelName,
                     shoppingList, searchQuery, filterCategory, paginatedShoppingList,
                     newItemText, newItemCategory, storeCategories, addShoppingItem, deleteItem
                 };
+
 
             }
         }).mount('#app');
