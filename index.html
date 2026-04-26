@@ -686,7 +686,8 @@
 
                 const getNaverUrl = (q) => `https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(q)}`;
                 const getGoogleUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
-                const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬', cafe: '☕', transport: '🚌' }[t] || '📍');
+                const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬', cafe: '☕', transport: '🚌', dessert: '🍦' }[t] || '📍');
+
                 const getHotelName = (idx) => "EURAM HOUSE (弘大/延南)";
 
                 onMounted(() => {
@@ -759,21 +760,22 @@
                                 description: '米飛兔可愛選品 (https://naver.me/FLe1ksjR) 與充滿設計感的聖水洞藥局 (https://naver.me/xfbhr0Iv)。' 
                             },
                             { 
-                                time: '16:30', 
-                                type: 'cafe', 
-                                title: 'ONION 聖水', 
-                                location: '어니언 성수', 
-                                description: '廢墟風咖啡廳鼻祖，品嚐招牌雪山麵包。' 
-                            },
-                            { 
-                                time: '17:30', 
-                                type: 'food', 
+                                time: '17:00', 
+                                type: 'dessert', 
                                 title: 'Gelato 冰淇淋 (開心果必點！)', 
                                 location: '서울특별시 성동구 연무장길 38', 
                                 naverUrl: 'https://naver.me/5dupvfoa', 
-                                description: '聖水洞午後的甜點時光，推薦濃郁的開心果口味。' 
+                                description: '✨ 名廚推薦！聖水洞午後的甜點時光，推薦濃郁的開心果口味。' 
                             },
-                            { time: '18:30', type: 'food', title: '鮮彩 聖水', location: '선채 성수', description: '高質感的精緻韓食美學，視覺與味覺的雙重饗宴。' }
+                            { 
+                                time: '18:30', 
+                                type: 'food', 
+                                title: 'JOJO海鮮刀削麵 (聖水店)', 
+                                location: '서울특별시 성동구 성수동2가 315-1', 
+                                naverUrl: 'https://naver.me/xoH8fSpV', 
+                                description: '從大邱紅到首爾的排隊名店！湯頭滿滿蛤蜊鮮甜無比。必點：海鮮刀削麵、料多到爆炸的海鮮煎餅。建議提前領號碼牌。' 
+                            }
+
 
                         ]
                     },
