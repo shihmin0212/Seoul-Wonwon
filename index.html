@@ -1,40 +1,514 @@
-<!doctype html>
-<html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Seoul Wonwon 2026 - 首爾之旅</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-    <meta name="description" content="2026 首爾五天四夜旅遊行程大綱">
-    <link rel="icon" type="image/png" href="./hero.png" />
-  </head>
-  <body>
-    <div id="app">
-      <!-- Content will be rendered here by main.js -->
-      <header class="header">
-        <div class="theme-toggle-fixed">
-          <button id="theme-btn" class="theme-btn" title="切換黑白對決">
-            <span class="vs">VS</span>
-          </button>
-        </div>
-        <div class="header-content">
-          <h1 id="main-title">Seoul WONWON</h1>
-          <p>孫鍾元大師與首爾美食之旅</p>
-        </div>
-      </header>
-      
-      <main id="main-content">
-        <div class="loading">正在準備行程...</div>
-      </main>
+<!DOCTYPE html>
+<html lang="zh-TW">
 
-      <nav class="bottom-nav">
-        <button class="nav-item active" data-view="itinerary">行程</button>
-        <button class="nav-item" data-view="flights">航班</button>
-        <button class="nav-item" data-view="info">資訊</button>
-      </nav>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seoul Wonwon 2026 - 首爾美食對決</title>
+    <link rel="icon" type="image/png" href="./hero.png">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Outfit:wght@500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            transition: background 0.5s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .card:active {
+            transform: scale(0.97);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Modal 動畫 */
+        .modal-enter-active,
+        .modal-leave-active {
+            transition: opacity 0.3s;
+        }
+
+        .modal-enter-from,
+        .modal-leave-to {
+            opacity: 0;
+        }
+
+        .modal-enter-active .modal-content,
+        .modal-leave-active .modal-content {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-enter-from .modal-content,
+        .modal-leave-to .modal-content {
+            transform: scale(0.9) translateY(20px);
+        }
+
+        /* 頁籤選中動畫 */
+        .tab-active {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .btn-naver {
+            background: #03C75A;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(3, 199, 90, 0.2);
+        }
+
+        .btn-naver:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body :class="theme.bgGradient">
+
+    <div id="app" class="max-w-md mx-auto min-h-screen pb-32 transition-colors duration-500 relative flex flex-col">
+
+        <!-- Header: Osaka Style -->
+        <header
+            class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm rounded-b-[2.5rem] border-b-4 transition-colors duration-500 flex-shrink-0"
+            :class="theme.borderColor">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h1 class="text-3xl font-black tracking-tighter flex items-center gap-2" :class="theme.textColor" style="font-family: 'Outfit';">
+                            Seoul Wonwon
+                            <span class="text-2xl animate-float">{{ theme.icon }}</span>
+                        </h1>
+                        <div class="text-xs font-bold text-gray-400 mt-1 pl-1">04/30 - 05/04 ✨ {{ theme.slogan }}</div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button @click="showShoppingList = true"
+                            class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm border-2 border-gray-100 bg-white hover:bg-gray-50 transition active:scale-90 relative">
+                            🛍️
+                            <span v-if="shoppingList.filter(i=>!i.checked).length > 0"
+                                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+                                {{ shoppingList.filter(i=>!i.checked).length }}
+                            </span>
+                        </button>
+                        <button @click="showTranslator = true"
+                            class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm border-2 border-gray-100 bg-white hover:bg-gray-50 transition active:scale-90">
+                            🗣️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Theme Switcher -->
+                <div class="flex justify-center gap-6 mt-2 bg-gray-100/50 p-2 rounded-2xl border border-gray-100">
+                    <button @click="setTheme('white')"
+                        class="w-10 h-10 rounded-full bg-white shadow-inner flex items-center justify-center text-xl relative transition-transform hover:scale-110"
+                        :class="{'ring-4 ring-gray-300 ring-offset-2': currentThemeKey === 'white'}">⚪</button>
+                    <button @click="setTheme('black')"
+                        class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-xl relative transition-transform hover:scale-110"
+                        :class="{'ring-4 ring-gray-600 ring-offset-2': currentThemeKey === 'black'}">⚫</button>
+                    <button @click="setTheme('kvibe')"
+                        class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-xl relative transition-transform hover:scale-110"
+                        :class="{'ring-4 ring-indigo-300 ring-offset-2': currentThemeKey === 'kvibe'}">🇰🇷</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Currency Converter -->
+        <div
+            class="mx-4 mt-4 mb-2 p-4 bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-white px-3 py-1.5 rounded-xl" :class="theme.btnColor">₩ 匯率</span>
+                <span class="text-sm font-bold text-gray-600">{{ currentRate }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="number" v-model="krwAmount" placeholder="KRW"
+                    class="w-24 p-2 bg-gray-50 border-0 rounded-xl text-right text-sm font-bold focus:ring-2 focus:ring-blue-400 outline-none">
+                <span class="text-xs text-gray-400">≈</span>
+                <span class="font-black text-lg text-gray-800">${{ twdAmount }}</span>
+            </div>
+        </div>
+
+        <!-- Day Tabs -->
+        <div class="sticky top-[180px] z-40 bg-white/95 backdrop-blur shadow-sm pt-2 pb-2 overflow-x-auto no-scrollbar flex gap-2 px-4 border-b border-gray-100"
+            ref="tabContainer">
+            <button v-for="(day, index) in itinerary" :key="index" @click="activeDayIndex = index"
+                :id="'day-tab-' + index"
+                class="flex-shrink-0 px-5 py-3 rounded-2xl text-sm font-black transition-all border border-transparent whitespace-nowrap"
+                :class="activeDayIndex === index ? 'bg-gray-900 text-white shadow-xl scale-105' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'">
+                Day {{ day.day }}
+                <span class="block text-[10px] font-bold opacity-70">{{ day.date.split('.')[1] }}/{{ day.date.split('.')[2] }}</span>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-4 flex-1 overflow-y-auto">
+            
+            <!-- Flight Status -->
+            <div v-if="activeDayIndex === 0 || activeDayIndex === 4" class="card mb-6 p-5 border-l-[8px] bg-indigo-50 border-indigo-400">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-black text-indigo-900">{{ activeDayIndex === 0 ? '✈️ 去程航班' : '✈️ 回程航班' }}</h3>
+                    <span class="text-xs bg-white px-3 py-1 rounded-lg text-indigo-600 font-bold shadow-sm">CI 162/163</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-700 font-black tracking-tighter">
+                    <div class="text-center">
+                        <div class="text-2xl">{{ activeDayIndex === 0 ? '12:55' : '13:50' }}</div>
+                        <div class="text-[10px] text-gray-400 uppercase">{{ activeDayIndex === 0 ? 'TPE 桃園' : 'ICN 仁川' }}</div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center px-4 flex-1">
+                        <span class="text-[10px] text-gray-400 mb-1">2h 35m</span>
+                        <div class="w-full h-0.5 bg-gray-200 relative">
+                            <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-indigo-50 px-2 text-indigo-400">✈️</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl">{{ activeDayIndex === 0 ? '16:30' : '15:30' }}</div>
+                        <div class="text-[10px] text-gray-400 uppercase">{{ activeDayIndex === 0 ? 'ICN 仁川' : 'TPE 桃園' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 pb-12">
+                <div v-for="(item, i) in itinerary[activeDayIndex].events" :key="i" class="relative">
+                    <div class="card p-5 border-l-[8px]" :class="item.type === 'food' ? theme.borderColor : 'border-l-gray-300'">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center gap-2 min-w-[55px]">
+                                <span class="text-[11px] font-black text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">{{ item.time }}</span>
+                                <div class="text-3xl mt-1">{{ getTypeIcon(item.type) }}</div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-black text-gray-800 leading-tight text-lg">{{ item.title }}</h3>
+                                    <span v-if="item.type === 'food'"
+                                        class="shrink-0 text-[10px] text-white px-2 py-1 rounded-lg font-bold shadow-sm ml-2"
+                                        :class="theme.btnColor">名廚推薦</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2 font-medium leading-relaxed">{{ item.description }}</p>
+                                
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <a :href="getNaverUrl(item.location || item.title)" target="_blank" class="btn-naver">
+                                        <span>NAVER MAP</span>
+                                    </a>
+                                    <a v-if="item.location" :href="getGoogleUrl(item.location)" target="_blank" class="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-[10px] font-bold flex items-center">
+                                        Google Map
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="i < itinerary[activeDayIndex].events.length - 1"
+                        class="relative pl-10 py-3 flex items-center">
+                        <div class="absolute left-[33px] top-0 bottom-0 w-0.5 border-l-2 border-dashed border-gray-300">
+                        </div>
+                        <div class="relative z-10 flex items-center gap-2 bg-white/50 border border-gray-200 shadow-sm px-4 py-2 rounded-full text-[10px] font-bold text-gray-400 w-full justify-center">
+                            <span>🚶 移動至下個目的地</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shopping List Modal -->
+        <transition name="modal">
+            <div v-if="showShoppingList"
+                class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 py-6"
+                style="background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);">
+                <div class="absolute inset-0" @click="showShoppingList = false"></div>
+                <div class="modal-content w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl overflow-hidden relative border-4 flex flex-col max-h-[85vh]"
+                    :class="theme.borderColor">
+                    <div class="p-6 border-b flex justify-between items-center" :class="theme.lightBg">
+                        <h3 class="font-black text-xl flex items-center gap-2" :class="theme.textColor">🛍️ 必買清單</h3>
+                        <button @click="showShoppingList = false" class="text-3xl font-black text-gray-300 hover:text-gray-500">×</button>
+                    </div>
+
+                    <div class="px-6 pt-4 pb-2 flex gap-2">
+                        <div class="relative flex-1">
+                            <span class="absolute left-3 top-2.5 text-gray-400 text-xs">🔍</span>
+                            <input type="text" v-model="searchQuery" placeholder="搜尋商品..."
+                                class="w-full pl-9 pr-3 py-2.5 rounded-2xl border-0 bg-gray-100 text-sm focus:ring-2 focus:ring-blue-400 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-4 flex gap-2 overflow-x-auto no-scrollbar">
+                        <button v-for="cat in ['All', ...storeCategories]" :key="cat" @click="filterCategory = cat"
+                            class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all border"
+                            :class="filterCategory === cat ? theme.btnColor + ' text-white border-transparent' : 'bg-white text-gray-400 border-gray-200'">
+                            {{ cat === 'All' ? '全部' : cat }}
+                        </button>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0 bg-gray-50/50">
+                        <div v-for="item in paginatedShoppingList" :key="item.id"
+                            class="flex items-start gap-4 p-4 rounded-2xl border transition-all"
+                            :class="item.checked ? 'bg-gray-100/50 border-gray-200 opacity-50' : 'bg-white border-gray-200 shadow-sm'">
+                            <input type="checkbox" v-model="item.checked"
+                                class="mt-1 w-6 h-6 rounded-lg accent-indigo-600 flex-shrink-0">
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[9px] px-2 py-0.5 rounded-lg text-white bg-gray-400 font-bold">
+                                        {{ item.category }}
+                                    </span>
+                                </div>
+                                <div class="font-black text-gray-800 break-words"
+                                    :class="{'line-through text-gray-400': item.checked}">{{ item.text }}</div>
+                                <div class="text-[11px] text-gray-400 mt-1" v-if="item.note">{{ item.note }}</div>
+                            </div>
+                            
+                            <button @click="deleteItem(item)" class="text-gray-300 hover:text-red-500 text-xl font-bold">×</button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-white border-t">
+                        <div class="flex gap-2 mb-3">
+                            <select v-model="newItemCategory" class="text-xs p-3 rounded-2xl border bg-gray-50 font-bold outline-none">
+                                <option v-for="cat in storeCategories" :value="cat">{{ cat }}</option>
+                            </select>
+                            <input type="text" v-model="newItemText" placeholder="想買什麼..."
+                                class="flex-1 p-3 rounded-2xl border bg-gray-50 text-sm font-bold outline-none"
+                                @keyup.enter="addShoppingItem">
+                        </div>
+                        <button @click="addShoppingItem"
+                            class="w-full py-4 rounded-2xl text-white font-black text-sm shadow-lg active:scale-95 transition-transform"
+                            :class="theme.btnColor">
+                            ＋ 新增商品
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Translator Modal -->
+        <transition name="modal">
+            <div v-if="showTranslator"
+                class="fixed inset-0 z-[100] flex items-end sm:items-center justify-center px-4 py-6"
+                style="background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);">
+                <div class="absolute inset-0" @click="showTranslator = false"></div>
+                <div class="modal-content w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl overflow-hidden relative border-4"
+                    :class="theme.borderColor">
+                    <div class="p-6 flex justify-between items-center border-b" :class="theme.lightBg">
+                        <h3 class="font-black text-xl flex items-center gap-2" :class="theme.textColor">🗣️ 韓語小幫手</h3>
+                        <button @click="showTranslator = false"
+                            class="text-gray-300 hover:text-gray-500 text-3xl font-black">×</button>
+                    </div>
+                    <div class="flex p-3 gap-2 overflow-x-auto no-scrollbar bg-gray-50">
+                        <button v-for="cat in ['用餐', '交通', '購物', '通用']" :key="cat" @click="currentCategory = cat"
+                            class="flex-1 py-3 px-4 rounded-2xl text-xs font-black transition-all whitespace-nowrap"
+                            :class="currentCategory === cat ? theme.btnColor + ' text-white shadow-md' : 'bg-white text-gray-400 border'">{{
+                            cat }}</button>
+                    </div>
+                    <div class="h-[350px] overflow-y-auto p-6 space-y-4 bg-gray-50/50">
+                        <div v-for="(phrase, idx) in currentPhrases" :key="idx"
+                            class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between active:scale-95 transition-transform"
+                            @click="speakKorean(phrase.kr)">
+                            <div>
+                                <div class="font-black text-gray-800 text-lg">{{ phrase.tw }}</div>
+                                <div class="text-[10px] text-gray-400 font-bold uppercase mt-1">{{ phrase.romaji }}</div>
+                                <div class="text-sm text-indigo-600 font-bold mt-1">{{ phrase.kr }}</div>
+                            </div>
+                            <button
+                                class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-2xl shadow-inner">🔊</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
     </div>
-    <script type="module" src="./src/main.js"></script>
-  </body>
+
+    <script>
+        const { createApp, ref, computed, onMounted, watch } = Vue;
+
+        const THEMES = {
+            white: { name: '白匙', icon: '👨‍🍳', slogan: '優雅的黑白對決', bgGradient: 'bg-gradient-to-br from-gray-50 via-white to-gray-100', textColor: 'text-gray-800', borderColor: 'border-gray-200', btnColor: 'bg-gray-800', lightBg: 'bg-gray-50' },
+            black: { name: '黑匙', icon: '🔥', slogan: '極致的味道戰爭', bgGradient: 'bg-gradient-to-br from-gray-900 via-gray-800 to-black', textColor: 'text-white', borderColor: 'border-gray-700', btnColor: 'bg-indigo-600', lightBg: 'bg-gray-800' },
+            kvibe: { name: '首爾', icon: '🗼', slogan: 'K-Style 潮流之旅', bgGradient: 'bg-gradient-to-br from-indigo-50 via-white to-purple-50', textColor: 'text-indigo-600', borderColor: 'border-indigo-300', btnColor: 'bg-indigo-500', lightBg: 'bg-indigo-50' }
+        };
+
+        const KR_DATA = {
+            '用餐': [
+                { tw: '我訂位了', kr: '예약했습니다', romaji: 'Yeyak-haess-seumnida' },
+                { tw: '請給我這個', kr: '이거 주세요', romaji: 'Igeo juseyo' },
+                { tw: '不辣', kr: '안 맵게 해주세요', romaji: 'An maepge haejuseyo' },
+                { tw: '買單', kr: '계산해 주세요', romaji: 'Gyesan-hae juseyo' }
+            ],
+            '交通': [
+                { tw: '請去這裡', kr: '여기 가주세요', romaji: 'Yeogi gajuseyo' },
+                { tw: '地鐵站在哪？', kr: '지하철역 어디예요?', romaji: 'Jihacheol-yeok eodi-yeyo?' },
+                { tw: '可以刷卡嗎？', kr: '카드 돼요?', romaji: 'Kadeu dwaeyo?' }
+            ],
+            '購物': [
+                { tw: '多少錢？', kr: '얼마예요?', romaji: 'Eolmayeyo?' },
+                { tw: '免稅嗎？', kr: '텍스프리 돼요?', romaji: 'Teks-peuri dwaeyo?' },
+                { tw: '請給我袋子', kr: '봉투 주세요', romaji: 'Bongtu juseyo' }
+            ],
+            '通用': [
+                { tw: '謝謝', kr: '감사합니다', romaji: 'Gamsahamnida' },
+                { tw: '你好', kr: '안녕하세요', romaji: 'Annyeonghaseyo' },
+                { tw: '不好意思', kr: '죄송합니다', romaji: 'Joesong-hamnida' }
+            ]
+        };
+
+        createApp({
+            setup() {
+                const currentThemeKey = ref('white');
+                const activeDayIndex = ref(0);
+                const krwAmount = ref('');
+                const currentRate = ref('0.0240');
+                const showTranslator = ref(false);
+                const showShoppingList = ref(false);
+                const currentCategory = ref('用餐');
+                const searchQuery = ref('');
+                const filterCategory = ref('All');
+                const newItemText = ref('');
+                const newItemCategory = ref('Olive Young');
+                const storeCategories = ['Olive Young', 'Lotte Mart', 'Daiso', 'Musinsa', '其他'];
+
+                const shoppingList = ref([
+                    { id: 1, text: 'Torriden 潛水艇精華', category: 'Olive Young', checked: false, note: '保濕神物' },
+                    { id: 2, text: 'HBAF 杏仁果', category: 'Lotte Mart', checked: false, note: '伴手禮首選' },
+                    { id: 3, text: 'Rejuran 麗珠蘭面膜', category: 'Olive Young', checked: false, note: '醫美級修復' },
+                    { id: 4, text: '無印良品 韓國限定版', category: '其他', checked: false, note: '護照套/收納袋' }
+                ]);
+
+                const theme = computed(() => THEMES[currentThemeKey.value]);
+                const setTheme = (key) => currentThemeKey.value = key;
+                const currentPhrases = computed(() => KR_DATA[currentCategory.value]);
+                const twdAmount = computed(() => !krwAmount.value ? 0 : Math.ceil(krwAmount.value * currentRate.value));
+
+                const paginatedShoppingList = computed(() => {
+                    return shoppingList.value.filter(item => {
+                        const matchesSearch = item.text.toLowerCase().includes(searchQuery.value.toLowerCase());
+                        const matchesCategory = filterCategory.value === 'All' || item.category === filterCategory.value;
+                        return matchesSearch && matchesCategory;
+                    });
+                });
+
+                const addShoppingItem = () => {
+                    if (newItemText.value.trim()) {
+                        shoppingList.value.unshift({
+                            id: Date.now(),
+                            text: newItemText.value,
+                            category: newItemCategory.value,
+                            checked: false,
+                            note: ''
+                        });
+                        newItemText.value = '';
+                    }
+                };
+
+                const deleteItem = (item) => {
+                    shoppingList.value = shoppingList.value.filter(i => i.id !== item.id);
+                };
+
+                const speakKorean = (text) => {
+                    if ('speechSynthesis' in window) {
+                        const u = new SpeechSynthesisUtterance(text);
+                        u.lang = 'ko-KR'; u.rate = 0.9;
+                        window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+                    }
+                };
+
+                const getNaverUrl = (q) => `https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(q)}`;
+                const getGoogleUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+                const getTypeIcon = (t) => ({ food: '🥩', shop: '👟', spot: '🏰', tour: '✨', flight: '✈️', arrival: '🛬' }[t] || '📍');
+
+                onMounted(() => {
+                    fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://tw.rter.info/capi.php'))
+                        .then(res => res.json())
+                        .then(raw => {
+                            const data = JSON.parse(raw.contents);
+                            if (data.USDTWD && data.USDKRW) {
+                                currentRate.value = (data.USDTWD.Exrate / data.USDKRW.Exrate).toFixed(4);
+                            }
+                        });
+                });
+
+                const itinerary = ref([
+                    {
+                        day: 1, date: '2026.04.30', title: '抵達首爾：大師序章',
+                        events: [
+                            { time: '12:55', type: 'flight', title: 'TPE 桃園出發', location: '桃園國際機場', description: '啟程前往首爾，開啟美食巔峰對決。' },
+                            { time: '18:30', type: 'food', title: '廣藏市場 (光之對決)', location: '서울특별시 종로구 예지동 2-1', description: '廣藏市場 (광장시장) - 體驗最道地的市場小吃競爭。' },
+                            { time: '20:30', type: 'shop', title: '樂天超市 Zettaplex', location: '서울특별시 중구 봉래동2가 122-11', description: '樂天超市 Zettaplex 首爾站店 - 重裝掃貨首選。' }
+                        ]
+                    },
+                    {
+                        day: 2, date: '2026.05.01', title: '潮流與料理的激戰',
+                        events: [
+                            { time: '10:30', type: 'food', title: 'Rudebekia 早午餐', location: '서울특별시 종로구 세종로 100', description: '在光化門開啟優雅早晨。' },
+                            { time: '13:00', type: 'shop', title: '弘大潮流購物巡禮', location: '무신사 스탠다드 홍대점', description: 'Musinsa Standard 弘大店、AK PLAZA。' },
+                            { time: '16:00', type: 'food', title: 'Osteria Sam Kim', location: '서울특별시 마포구 合正洞 386-37', description: '《黑白大廚》白匙名廚 Sam Kim 的經典西餐。' }
+                        ]
+                    },
+                    {
+                        day: 3, date: '2026.05.02', title: '聖水洞：設計感與溫度',
+                        events: [
+                            { time: '11:00', type: 'food', title: '無垢屋 人蔘雞湯', location: '무구옥 성수점', description: '溫補雞肉料理，大廚推薦。' },
+                            { time: '13:30', type: 'shop', title: '聖水大林倉庫', location: '무신사 스토어 성수 大林倉庫', description: '聖水洞必訪時尚地標。' },
+                            { time: '18:30', type: 'food', title: '鮮彩 聖水', location: '선채 성수', description: '高質感的精緻韓食美學。' }
+                        ]
+                    },
+                    {
+                        day: 4, date: '2026.05.03', title: '延南/西橋：隱藏版巡禮',
+                        events: [
+                            { time: '11:00', type: 'tour', title: 'Youssoful 香氛', location: '유쏘풀 연남점', description: '大受好評的 4min 香水體驗。' },
+                            { time: '14:00', type: 'shop', title: '文具與家飾質感行', location: '키트베러', description: 'Kit Better 旗艦店探索。' }
+                        ]
+                    },
+                    {
+                        day: 5, date: '2026.05.04', title: '歸途：餘味無窮',
+                        events: [
+                            { time: '10:00', type: 'shop', title: '最後採買', location: '首爾站', description: '補齊所有大廚等級的伴手禮。' },
+                            { time: '13:50', type: 'flight', title: 'ICN 機場出發', location: '仁川國際機場', description: '帶著滿滿的對決回憶返台。' }
+                        ]
+                    }
+                ]);
+
+                return {
+                    itinerary, activeDayIndex, currentThemeKey, theme, setTheme,
+                    krwAmount, twdAmount, currentRate, showTranslator, showShoppingList,
+                    currentCategory, currentPhrases, speakKorean, getNaverUrl, getGoogleUrl, getTypeIcon,
+                    shoppingList, searchQuery, filterCategory, paginatedShoppingList,
+                    newItemText, newItemCategory, storeCategories, addShoppingItem, deleteItem
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+
 </html>
