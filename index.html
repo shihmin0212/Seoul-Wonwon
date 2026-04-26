@@ -327,7 +327,9 @@
                 <input type="number" v-model="krwAmount" placeholder="KRW"
                     class="w-24 p-2 bg-gray-50 border-0 rounded-xl text-right text-sm font-bold focus:ring-2 focus:ring-blue-400 outline-none">
                 <span class="text-xs text-gray-400">≈</span>
-                <span class="font-black text-lg text-gray-800">${{ twdAmount }}</span>
+                <input type="number" v-model="twdAmount" placeholder="TWD"
+                    class="w-20 p-2 bg-white/50 border-0 rounded-xl text-right text-sm font-bold focus:ring-2 focus:ring-blue-400 outline-none">
+
             </div>
         </div>
 
@@ -597,7 +599,9 @@
 
                 const activeDayIndex = ref(0);
                 const krwAmount = ref('');
+                const twdAmount = ref('');
                 const currentRate = ref('0.0240');
+
                 const showTranslator = ref(false);
                 const showShoppingList = ref(false);
                 const showHotelDetails = ref(false);
@@ -621,7 +625,18 @@
                 const theme = computed(() => THEMES[currentThemeKey.value]);
                 const setTheme = (key) => currentThemeKey.value = key;
                 const currentPhrases = computed(() => KR_DATA[currentCategory.value]);
-                const twdAmount = computed(() => !krwAmount.value ? 0 : Math.ceil(krwAmount.value * currentRate.value));
+                watch(krwAmount, (val) => {
+                    if (document.activeElement.placeholder === 'KRW') {
+                        twdAmount.value = val === '' ? '' : Math.ceil(val * currentRate.value);
+                    }
+                });
+
+                watch(twdAmount, (val) => {
+                    if (document.activeElement.placeholder === 'TWD') {
+                        krwAmount.value = val === '' ? '' : Math.floor(val / currentRate.value);
+                    }
+                });
+
 
                 const paginatedShoppingList = computed(() => {
                     return shoppingList.value.filter(item => {
