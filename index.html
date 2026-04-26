@@ -132,18 +132,8 @@
                     </div>
                 </div>
 
-                <!-- Theme Switcher -->
-                <div class="flex justify-center gap-6 mt-2 bg-gray-100/50 p-2 rounded-2xl border border-gray-100">
-                    <button @click="setTheme('white')"
-                        class="w-10 h-10 rounded-full bg-white shadow-inner flex items-center justify-center text-xl relative transition-transform hover:scale-110"
-                        :class="{'ring-4 ring-gray-300 ring-offset-2': currentThemeKey === 'white'}">⚪</button>
-                    <button @click="setTheme('black')"
-                        class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-xl relative transition-transform hover:scale-110"
-                        :class="{'ring-4 ring-gray-600 ring-offset-2': currentThemeKey === 'black'}">⚫</button>
-                    <button @click="setTheme('kvibe')"
-                        class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-xl relative transition-transform hover:scale-110"
-                        :class="{'ring-4 ring-indigo-300 ring-offset-2': currentThemeKey === 'kvibe'}">🇰🇷</button>
-                </div>
+                <!-- Theme Switcher Removed as per user request -->
+
             </div>
         </header>
 
@@ -466,10 +456,9 @@
         const { createApp, ref, computed, onMounted, watch } = Vue;
 
         const THEMES = {
-            white: { name: '白匙', icon: '👨‍🍳', slogan: '優雅的黑白對決', bgGradient: 'bg-gradient-to-br from-gray-50 via-white to-gray-100', textColor: 'text-gray-800', borderColor: 'border-gray-200', btnColor: 'bg-gray-800', lightBg: 'bg-gray-50' },
-            black: { name: '黑匙', icon: '🔥', slogan: '極致的味道戰爭', bgGradient: 'bg-gradient-to-br from-gray-900 via-gray-800 to-black', textColor: 'text-white', borderColor: 'border-gray-700', btnColor: 'bg-indigo-600', lightBg: 'bg-gray-800' },
-            kvibe: { name: '首爾', icon: '🗼', slogan: 'K-Style 潮流之旅', bgGradient: 'bg-gradient-to-br from-indigo-50 via-white to-purple-50', textColor: 'text-indigo-600', borderColor: 'border-indigo-300', btnColor: 'bg-indigo-500', lightBg: 'bg-indigo-50' }
+            kvibe: { name: '去首爾看元元', icon: '🗼', slogan: 'K-Style 潮流之旅 ✨', bgGradient: 'bg-gradient-to-br from-indigo-50 via-white to-purple-50', textColor: 'text-indigo-600', borderColor: 'border-indigo-300', btnColor: 'bg-indigo-500', lightBg: 'bg-indigo-50' }
         };
+
 
         const KR_DATA = {
             '用餐': [
@@ -497,7 +486,8 @@
 
         createApp({
             setup() {
-                const currentThemeKey = ref('white');
+                const currentThemeKey = ref('kvibe');
+
                 const activeDayIndex = ref(0);
                 const krwAmount = ref('');
                 const currentRate = ref('0.0240');
