@@ -249,9 +249,10 @@
             </div>
         </div>
 
-        <!-- Day Tabs -->
-        <div class="sticky top-[180px] z-40 bg-white/95 backdrop-blur shadow-sm pt-2 pb-2 overflow-x-auto no-scrollbar flex gap-2 px-4 border-b border-gray-100"
+        <!-- Day Tabs (Non-sticky as per request) -->
+        <div class="bg-white/95 backdrop-blur pt-2 pb-2 overflow-x-auto no-scrollbar flex gap-2 px-4 border-b border-gray-100"
             ref="tabContainer">
+
             <button v-for="(day, index) in itinerary" :key="index" @click="activeDayIndex = index"
                 :id="'day-tab-' + index"
                 class="flex-shrink-0 px-5 py-3 rounded-2xl text-sm font-black transition-all border border-transparent whitespace-nowrap"
@@ -577,7 +578,16 @@
 
 
                 onMounted(() => {
+                    // Auto-select today's day
+                    const now = new Date();
+                    const todayStr = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+                    const todayIndex = itinerary.value.findIndex(d => d.date === todayStr);
+                    if (todayIndex !== -1) {
+                        activeDayIndex.value = todayIndex;
+                    }
+
                     fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://tw.rter.info/capi.php'))
+
                         .then(res => res.json())
                         .then(raw => {
                             const data = JSON.parse(raw.contents);
